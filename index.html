@@ -1,1 +1,58 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DEMON HAMSTER</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#180d31,#080812);color:white;font-family:Arial;text-align:center;padding:20px 12px}
+h1{color:#d7a6ff;letter-spacing:2px}
+p{color:#bcb0d4}
+.stats{display:flex;justify-content:space-around;margin:24px 0}
+.stat{background:#261b3d;border:1px solid #6847a0;border-radius:15px;padding:12px;min-width:110px}
+.num{font-size:25px;font-weight:bold;color:#ffe17b;margin-top:8px}
+#hamster{width:190px;height:190px;border-radius:50%;border:4px solid #d5a6ff;background:radial-gradient(circle at 40% 30%,#fff0c4,#d99c61 65%,#754327);font-size:105px;display:flex;align-items:center;justify-content:center;margin:28px auto;box-shadow:0 0 35px #8c4be7;touch-action:manipulation}
+button{background:#8f4be8;border:0;color:white;padding:14px 20px;border-radius:12px;font-size:16px;font-weight:bold;margin:8px}
+</style>
+</head>
+<body>
+<h1>DEMON HAMSTER</h1>
+<p>Tap the hamster. Collect coins.</p>
+<div class="stats">
+<div class="stat">COINS<div class="num" id="coins">0</div></div>
+<div class="stat">ENERGY<div class="num" id="energy">500</div></div>
+</div>
+<div id="hamster">🐹</div>
+<p id="hint">Tap to earn coins!</p>
+<button id="upgrade">UPGRADE · 50 coins</button>
+<script>
+let coins=Number(localStorage.getItem('dh_coins')||0);
+let energy=Number(localStorage.getItem('dh_energy')||500);
+let power=Number(localStorage.getItem('dh_power')||1);
+function render(){
+ document.getElementById('coins').textContent=coins;
+ document.getElementById('energy').textContent=energy;
+}
+function save(){
+ localStorage.setItem('dh_coins',coins);
+ localStorage.setItem('dh_energy',energy);
+ localStorage.setItem('dh_power',power);
+}
+document.getElementById('hamster').onclick=()=>{
+ if(energy<power){document.getElementById('hint').textContent='Not enough energy!';return}
+ coins+=power;energy-=power;render();save();
+ document.getElementById('hint').textContent='+'+power+' coin!';
+};
+document.getElementById('upgrade').onclick=()=>{
+ if(coins<50){document.getElementById('hint').textContent='You need 50 coins!';return}
+ coins-=50;power++;render();save();
+ document.getElementById('upgrade').textContent='POWER: '+power;
+};
+setInterval(()=>{if(energy<500){energy=Math.min(500,energy+1);render();save()}},1000);
+render();
+</script>
+</body>
+</html>
+
